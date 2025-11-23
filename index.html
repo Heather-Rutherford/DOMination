@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CodeQuest: DOMination</title>
+    <link rel="stylesheet" href="styles.css" class="stylesheet" />
+    <link rel="icon" href="images/favicon.png" />
+  </head>
+  <body onload="loadQuestion(0)">
+    <!-- Step 1 – Start with HTML (The Structure)
+        HTML is the skeleton of our app — it’s where the quiz 
+        “lives” in the browser. We’ll need two main sections:
+
+        Quiz Section – shows the question and answer options.
+        Score Section – appears at the end to show results and a 
+        restart button.
+        
+        Why this matters: By separating these two sections, 
+        we can show and hide them in JavaScript easily without rebuilding 
+        everything from scratch.-->
+
+    <!-- Quiz Section – shows the question and answer options. -->
+    <div id="quiz-container">
+      <h1>JavaScript Fundamentals Quiz</h1>
+      <div id="question-container"></div>
+      <div id="options-container"></div>
+      <button id="next-button" disabled>Next Question</button>
+    </div>
+
+    <!-- Score Section – appears at the end to show results and a restart button. -->
+    <div id="score-container" class="hidden">
+      <h2>Your Score:</h2>
+      <p id="score"></p>
+      <button id="restart-button">Restart Quiz</button>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>

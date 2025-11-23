@@ -1,0 +1,52 @@
+/* Step 2 – Add Some CSS (The Look & Feel) */
+/* CSS is about making things nice and readable. */
+
+/* You can: */
+
+/* Center the quiz in the middle of the screen. */
+/* Give it some padding and a border. */
+/* Use .hidden { display: none; } to hide sections when needed. */
+
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  margin: 20px;
+}
+
+button {
+  padding: 10px 20px;
+  margin: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#quiz-container,
+#score-container {
+  background-color: white;
+  width: 50%;
+  margin: 50px auto;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+/* #question-container { */
+/* border: 1px solid darkred; */
+/* } */
+
+#options-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  /* padding-left: calc(80% - 20px); */
+  /* border: 1px solid darkred; */
+}
+.hidden {
+  display: none;
+}
+
+#next-button:disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
