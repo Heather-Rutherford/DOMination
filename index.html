@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="styles.css" class="stylesheet" />
     <link rel="icon" href="images/favicon.png" />
   </head>
-  <body onload="loadQuestion(0)">
+  <body>
     <!-- Step 1 – Start with HTML (The Structure)
         HTML is the skeleton of our app — it’s where the quiz 
         “lives” in the browser. We’ll need two main sections:
@@ -26,13 +26,13 @@
       <div id="question-container"></div>
       <div id="options-container"></div>
       <button id="next-button" disabled>Next Question</button>
+      <button id="restart-button" style="display: none">Restart Quiz</button>
     </div>
 
     <!-- Score Section – appears at the end to show results and a restart button. -->
     <div id="score-container" class="hidden">
       <h2>Your Score:</h2>
       <p id="score"></p>
-      <button id="restart-button">Restart Quiz</button>
     </div>
     <script src="script.js"></script>
   </body>

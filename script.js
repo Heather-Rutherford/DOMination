@@ -54,6 +54,15 @@ const quizData = [
   },
 ];
 
+let currentQuestionIndex = 0;
+let score = 0;
+
+// Select buttons and containers
+const nextQuestionButton = document.getElementById("next-button");
+const restartButton = document.getElementById("restart-button");
+const questionContainer = document.getElementById("question-container");
+const optionsContainer = document.getElementById("options-container");
+
 // Step 4 – Show a Question on the Page
 // We’ll need a function, e.g. loadQuestion(), that:
 
@@ -61,23 +70,21 @@ const quizData = [
 // Updates #question-container with the question text.
 // Loops over the options and creates a button for each.
 
-function loadQuestion(index) {
-  // Get the current question object
+function loadQuestion() {
+  const index = currentQuestionIndex;
   const quizQuestion = quizData[index];
-  console.log(quizQuestion); // should be an array
-  console.log(index); // should be within range
-  console.log(quizQuestion.question); // should be a question
+  if (nextQuestionButton.disabled === false) {
+    // If next-button is enabled, disable it.
+    nextQuestionButton.disabled = true;
+  }
+  // Get the current question object.
+  const currentQuestion = quizData[currentQuestionIndex];
 
-  // Select buttons and containers
-  const nextQuestionButton = document.getElementById("next-question");
-  const questionContainer = document.getElementById("question-container");
-  const optionsContainer = document.getElementById("options-container");
-
-  // Clear out any old options before adding new ones
+  // Clear out the old question before adding the new one.
   questionContainer.innerHTML = "";
 
-  // Load question into the questionContainer.
-  questionContainer.innerHTML = quizQuestion.question;
+  // Load the new question into the questionContainer.
+  questionContainer.innerHTML = currentQuestion.question;
 
   // Guard clause: check if quizQuestion exists and has an options array
   if (!quizQuestion || !Array.isArray(quizQuestion.options)) {
@@ -92,58 +99,63 @@ function loadQuestion(index) {
   quizQuestion.options.forEach((option, i) => {
     const optionButton = document.createElement("button");
     optionButton.textContent = option;
+    optionButton.id = `option-btn-${i}`;
     optionButton.addEventListener("click", () => selectOption(i));
     optionsContainer.appendChild(optionButton);
   });
 }
 
 // Step 5 – Handle the User’s Choice
+function selectOption(option) {
+  // Get the current question object
+  const currentQuestion = quizData[currentQuestionIndex];
+  const elementUserAnswer = document.getElementById(`option-btn-${option}`);
+  const elementCorrectAnswer = document.getElementById(
+    `option-btn-${currentQuestion.answer}`
+  );
+  if (option === currentQuestion.answer) {
+    elementUserAnswer.style.backgroundColor = "#008000"; // Changes the text color to green
+    score++;
+  } else {
+    elementUserAnswer.style.backgroundColor = "#ff0000"; // Changes the text color to red
+    elementCorrectAnswer.style.backgroundColor = "#008000"; // Changes the correct answer text color to green
+  }
+  const buttons = optionsContainer.getElementsByTagName("button");
+  // Loop through the buttons and set their disabled property to true
+  for (let button of buttons) {
+    button.disabled = true;
+  }
+  // Enable the Next button
+  nextQuestionButton.disabled = false;
+}
 
-// Wait for the DOM to load
-// document.addEventListener("DOMContentLoaded", () => {
-//   // Select buttons and containers
-//   const nextQuestionButton = document.getElementById("next-question");
-//   const questionContainer = document.getElementById("question-container");
-//   const optionsContainer = document.getElementById("answers-container");
+// Function to move to the next question
+nextQuestionButton.onclick = () => {
+  currentQuestionIndex++;
+  if (currentQuestionIndex < quizData.length) {
+    loadQuestion();
+    nextQuestionButton.disabled = true; // Hide the Next button
+  } else {
+    questionContainer.textContent = `Quiz Over! Your score is ${score}/${quizData.length}`;
+    optionsContainer.innerHTML = ""; // Clear options
+    nextQuestionButton.style.display = "none"; // Hide the Next button
+    restartButton.style.display = "inline"; // Show the Restart button
+  }
+};
 
-//   // Function to fetch and display a single random dog image
-//   async function getQuestion() {
-//     // Fetch data from the Dog API
-//     const response = await fetch("https://dog.ceo/api/breeds/image/random");
-//     const data = await response.json();
+// Function to move to the next question
+restartButton.onclick = () => {
+  currentQuestionIndex = 0; // Reset question index
+  score = 0; // Reset score
+  if (currentQuestionIndex < quizData.length) {
+    loadQuestion();
+    nextQuestionButton.style.display = "inline"; // Show the Next button
+    nextQuestionButton.disabled = true; // Hide the Next button
+    restartButton.style.display = "none"; // Hide the Restart button
+  }
+};
 
-//     // Clear previous image
-//     singleDogContainer.innerHTML = "";
-
-//     // Create an image element and set its source
-//     const img = document.createElement("img");
-//     img.src = data.message;
-
-//     // Append the image to the container
-//     singleDogContainer.appendChild(img);
-//   }
-
-//   // Function to fetch and display multiple random dog images
-//   async function getMultipleDogImages() {
-//     // Fetch data from the Dog API (fetching 3 random images)
-//     const response = await fetch("https://dog.ceo/api/breeds/image/random/3");
-//     const data = await response.json();
-
-//     // Clear previous images
-//     multipleDogContainer.innerHTML = "";
-
-//     // Iterate over the array of image URLs
-//     data.message.forEach((imageUrl) => {
-//       // Create an image element for each URL
-//       const img = document.createElement("img");
-//       img.src = imageUrl;
-
-//       // Append each image to the container
-//       multipleDogContainer.appendChild(img);
-//     });
-//   }
-
-//   // Add event listeners to buttons
-//   singleDogButton.addEventListener("click", getSingleDogImage);
-//   multipleDogButton.addEventListener("click", getMultipleDogImages);
-// });
+// Initialize the quiz when the page loads
+window.onload = function () {
+  loadQuestion();
+};
